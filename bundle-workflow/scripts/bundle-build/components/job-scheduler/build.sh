@@ -10,14 +10,13 @@ function usage() {
     echo ""
     echo "Arguments:"
     echo -e "-v VERSION\t[Required] OpenSearch version."
-    echo -e "-o DEST\t[Ignored] Full destination path from which to pickup dependent artifacts."
     echo -e "-s SNAPSHOT\t[Optional] Build a snapshot, default is 'false'."
     echo -e "-a ARCHITECTURE\t[Optional] Build architecture, ignored."
     echo -e "-o OUTPUT\t[Optional] Output path, default is 'artifacts'."
     echo -e "-h help"
 }
 
-while getopts ":h:v:s:o:a:d:" arg; do
+while getopts ":h:v:s:o:a:" arg; do
     case $arg in
         h)
             usage
@@ -31,9 +30,6 @@ while getopts ":h:v:s:o:a:d:" arg; do
             ;;
         o)
             OUTPUT=$OPTARG
-            ;;
-        d)
-            DEST=$OPTARG
             ;;
         a)
             ARCHITECTURE=$OPTARG
@@ -57,15 +53,15 @@ if [ -z "$VERSION" ]; then
 fi
 
 [[ "$SNAPSHOT" == "true" ]] && VERSION=$VERSION-SNAPSHOT
+[ -z "$OUTPUT" ] && OUTPUT=artifacts
 
-./gradlew build --no-daemon --refresh-dependencies -DskipTests=true -Dopensearch.version=$VERSION -Dbuild.snapshot=$SNAPSHOT
+mkdir -p $OUTPUT
+./gradlew assemble --no-daemon --refresh-dependencies -DskipTests=true -Dopensearch.version=$VERSION -Dbuild.snapshot=$SNAPSHOT
+
+mkdir -p $OUTPUT/plugins
+cp ./build/distributions/*.zip $OUTPUT/plugins
 
 ./gradlew publishToMavenLocal -Dopensearch.version=$VERSION -Dbuild.snapshot=$SNAPSHOT
 mkdir -p $OUTPUT/maven
 cp -r ~/.m2/repository/org/opensearch/opensearch-job-scheduler $OUTPUT/maven
 cp -r ~/.m2/repository/org/opensearch/opensearch-job-scheduler-spi $OUTPUT/maven
-
-./gradlew assemble --no-daemon --refresh-dependencies -DskipTests=true -Dopensearch.version=$VERSION -Dbuild.snapshot=$SNAPSHOT
-[ -z "$OUTPUT" ] && OUTPUT=artifacts
-mkdir -p $OUTPUT/plugins
-cp ./build/distributions/*.zip $OUTPUT/plugins
