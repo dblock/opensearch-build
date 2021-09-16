@@ -1,0 +1,207 @@
+ Scanning for projects...
+ ------------------------------------------------------------------------
+ Detecting the operating system and CPU architecture
+ ------------------------------------------------------------------------
+ os.detected.name: linux
+ os.detected.arch: x86_64
+ os.detected.version: 5.11
+ os.detected.version.major: 5
+ os.detected.version.minor: 11
+ os.detected.release: ubuntu
+ os.detected.release.version: 20.04
+ os.detected.release.like.ubuntu: true
+ os.detected.release.like.debian: true
+ os.detected.classifier: linux-x86_64
+ 
+ [1m-----------------< [0;36morg.opensearch:opensearch-security[0;1m >-----------------[m
+ [1mBuilding OpenSearch Security 1.1.0.0-SNAPSHOT[m
+ [1m--------------------------------[ jar 
+ 
+ [1m--- [0;32mmaven-dependency-plugin:2.8:tree[m [1m(default-cli)[m @ [36mopensearch-security[0;1m ---[m
+ org.opensearch:opensearch-security:jar:1.1.0.0-SNAPSHOT
+ +- org.opensearch.plugin:transport-netty4-client:jar:1.1.0-SNAPSHOT:compile
+ |  +- io.netty:netty-buffer:jar:4.1.59.Final:compile
+ |  +- io.netty:netty-codec:jar:4.1.59.Final:compile
+ |  +- io.netty:netty-codec-http:jar:4.1.59.Final:compile
+ |  +- io.netty:netty-common:jar:4.1.59.Final:compile
+ |  +- io.netty:netty-handler:jar:4.1.59.Final:compile
+ |  +- io.netty:netty-resolver:jar:4.1.59.Final:compile
+ |  \- io.netty:netty-transport:jar:4.1.59.Final:compile
+ +- com.google.guava:guava:jar:25.1-jre:compile
+ |  +- com.google.code.findbugs:jsr305:jar:3.0.2:compile
+ |  +- org.checkerframework:checker-qual:jar:2.0.0:compile
+ |  +- com.google.errorprone:error_prone_annotations:jar:2.1.3:compile
+ |  +- com.google.j2objc:j2objc-annotations:jar:1.1:compile
+ |  \- org.codehaus.mojo:animal-sniffer-annotations:jar:1.14:compile
+ +- org.greenrobot:eventbus:jar:3.2.0:compile
+ +- commons-cli:commons-cli:jar:1.3.1:compile
+ +- org.bouncycastle:bcprov-jdk15on:jar:1.67:compile
+ +- org.opensearch:opensearch:jar:1.1.0-SNAPSHOT:provided
+ |  +- org.opensearch:opensearch-core:jar:1.1.0-SNAPSHOT:provided
+ |  +- org.opensearch:opensearch-secure-sm:jar:1.1.0-SNAPSHOT:provided
+ |  +- org.opensearch:opensearch-x-content:jar:1.1.0-SNAPSHOT:provided
+ |  |  +- org.yaml:snakeyaml:jar:1.26:provided
+ |  |  +- com.fasterxml.jackson.core:jackson-core:jar:2.11.4:provided
+ |  |  +- com.fasterxml.jackson.dataformat:jackson-dataformat-smile:jar:2.11.4:provided
+ |  |  +- com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:jar:2.11.4:provided
+ |  |  \- com.fasterxml.jackson.dataformat:jackson-dataformat-cbor:jar:2.11.4:provided
+ |  +- org.opensearch:opensearch-geo:jar:1.1.0-SNAPSHOT:provided
+ |  +- org.apache.lucene:lucene-core:jar:8.9.0:provided
+ |  +- org.apache.lucene:lucene-analyzers-common:jar:8.9.0:provided
+ |  +- org.apache.lucene:lucene-backward-codecs:jar:8.9.0:provided
+ |  +- org.apache.lucene:lucene-grouping:jar:8.9.0:provided
+ |  +- org.apache.lucene:lucene-highlighter:jar:8.9.0:provided
+ |  +- org.apache.lucene:lucene-join:jar:8.9.0:provided
+ |  +- org.apache.lucene:lucene-memory:jar:8.9.0:provided
+ |  +- org.apache.lucene:lucene-misc:jar:8.9.0:provided
+ |  +- org.apache.lucene:lucene-queries:jar:8.9.0:provided
+ |  +- org.apache.lucene:lucene-queryparser:jar:8.9.0:provided
+ |  +- org.apache.lucene:lucene-sandbox:jar:8.9.0:provided
+ |  +- org.apache.lucene:lucene-spatial-extras:jar:8.9.0:provided
+ |  +- org.apache.lucene:lucene-spatial3d:jar:8.9.0:provided
+ |  +- org.apache.lucene:lucene-suggest:jar:8.9.0:provided
+ |  +- org.opensearch:opensearch-cli:jar:1.1.0-SNAPSHOT:provided
+ |  |  \- net.sf.jopt-simple:jopt-simple:jar:5.0.2:provided
+ |  +- com.carrotsearch:hppc:jar:0.8.1:provided
+ |  +- joda-time:joda-time:jar:2.10.4:provided
+ |  +- com.tdunning:t-digest:jar:3.2:provided
+ |  +- org.hdrhistogram:HdrHistogram:jar:2.1.9:provided
+ |  +- org.apache.logging.log4j:log4j-api:jar:2.11.1:provided
+ |  \- org.elasticsearch:jna:jar:5.5.0:provided
+ +- org.apache.logging.log4j:log4j-core:jar:2.11.1:provided
+ +- com.fasterxml.jackson.core:jackson-databind:jar:2.11.2:compile
+ |  \- com.fasterxml.jackson.core:jackson-annotations:jar:2.11.2:compile
+ +- org.apache.logging.log4j:log4j-slf4j-impl:jar:2.11.1:compile
+ |  \- org.slf4j:slf4j-api:jar:1.7.25:compile
+ +- org.ldaptive:ldaptive:jar:1.2.3:compile
+ +- org.apache.httpcomponents:httpclient-cache:jar:4.5.13:compile
+ |  \- commons-logging:commons-logging:jar:1.2:compile
+ +- org.opensearch.client:opensearch-rest-high-level-client:jar:1.1.0-SNAPSHOT:compile
+ |  +- org.opensearch.client:opensearch-rest-client:jar:1.1.0-SNAPSHOT:compile
+ |  |  +- org.apache.httpcomponents:httpcore:jar:4.4.12:compile
+ |  |  +- org.apache.httpcomponents:httpasyncclient:jar:4.1.4:compile
+ |  |  \- org.apache.httpcomponents:httpcore-nio:jar:4.4.12:compile
+ |  +- org.opensearch.plugin:mapper-extras-client:jar:1.1.0-SNAPSHOT:compile
+ |  \- org.opensearch.plugin:rank-eval-client:jar:1.1.0-SNAPSHOT:compile
+ +- io.jsonwebtoken:jjwt-api:jar:0.10.5:compile
+ +- io.jsonwebtoken:jjwt-impl:jar:0.10.5:runtime
+ +- io.jsonwebtoken:jjwt-jackson:jar:0.10.5:runtime
+ +- org.apache.cxf:cxf-rt-rs-security-jose:jar:3.4.4:compile
+ |  +- org.apache.cxf:cxf-core:jar:3.4.4:compile
+ |  |  +- org.glassfish.jaxb:jaxb-runtime:jar:2.3.4:compile
+ |  |  |  +- org.glassfish.jaxb:txw2:jar:2.3.4:compile
+ |  |  |  \- com.sun.istack:istack-commons-runtime:jar:3.0.12:compile
+ |  |  +- com.fasterxml.woodstox:woodstox-core:jar:6.2.6:compile
+ |  |  |  \- org.codehaus.woodstox:stax2-api:jar:4.2.1:compile
+ |  |  +- org.apache.ws.xmlschema:xmlschema-core:jar:2.2.5:compile
+ |  |  \- jakarta.xml.bind:jakarta.xml.bind-api:jar:2.3.3:compile
+ |  +- org.apache.cxf:cxf-rt-security:jar:3.4.4:compile
+ |  +- org.apache.cxf:cxf-rt-rs-json-basic:jar:3.4.4:compile
+ |  +- jakarta.annotation:jakarta.annotation-api:jar:1.3.5:compile
+ |  +- jakarta.xml.ws:jakarta.xml.ws-api:jar:2.3.3:compile
+ |  +- jakarta.jws:jakarta.jws-api:jar:2.1.0:compile
+ |  +- jakarta.xml.soap:jakarta.xml.soap-api:jar:1.4.2:compile
+ |  +- com.sun.activation:jakarta.activation:jar:1.2.2:compile
+ |  +- com.sun.xml.messaging.saaj:saaj-impl:jar:1.5.3:runtime
+ |  |  \- org.jvnet.staxex:stax-ex:jar:1.8.3:runtime
+ |  +- org.apache.geronimo.specs:geronimo-jta_1.1_spec:jar:1.1.1:compile
+ |  \- org.jboss.spec.javax.rmi:jboss-rmi-api_1.0_spec:jar:1.0.6.Final:compile
+ +- com.github.wnameless:json-flattener:jar:0.5.0:compile
+ |  +- com.eclipsesource.minimal-json:minimal-json:jar:0.9.5:compile
+ |  \- org.apache.commons:commons-text:jar:1.2:compile
+ +- com.flipkart.zjsonpatch:zjsonpatch:jar:0.4.4:compile
+ +- org.apache.kafka:kafka-clients:jar:2.5.0:compile
+ |  +- com.github.luben:zstd-jni:jar:1.4.4-7:compile
+ |  +- org.lz4:lz4-java:jar:1.7.1:compile
+ |  \- org.xerial.snappy:snappy-java:jar:1.1.7.3:compile
+ +- com.onelogin:java-saml:jar:2.5.0:compile
+ |  +- com.onelogin:java-saml-core:jar:2.5.0:compile
+ |  +- org.apache.commons:commons-lang3:jar:3.4:compile
+ |  +- org.apache.santuario:xmlsec:jar:2.2.0:compile
+ |  \- commons-codec:commons-codec:jar:1.14:compile
+ +- org.opensaml:opensaml-saml-impl:jar:3.4.5:compile
+ |  +- org.opensaml:opensaml-profile-api:jar:3.4.5:compile
+ |  |  +- org.opensaml:opensaml-core:jar:3.4.5:compile
+ |  |  |  \- io.dropwizard.metrics:metrics-core:jar:3.1.2:compile
+ |  |  \- org.opensaml:opensaml-messaging-api:jar:3.4.5:compile
+ |  +- org.opensaml:opensaml-saml-api:jar:3.4.5:compile
+ |  |  +- org.opensaml:opensaml-xmlsec-api:jar:3.4.5:compile
+ |  |  \- org.opensaml:opensaml-soap-api:jar:3.4.5:compile
+ |  +- org.opensaml:opensaml-storage-api:jar:3.4.5:compile
+ |  +- org.opensaml:opensaml-security-impl:jar:3.4.5:compile
+ |  |  \- org.opensaml:opensaml-security-api:jar:3.4.5:compile
+ |  +- org.opensaml:opensaml-xmlsec-impl:jar:3.4.5:compile
+ |  |  \- org.cryptacular:cryptacular:jar:1.1.4:compile
+ |  +- org.opensaml:opensaml-soap-impl:jar:3.4.5:compile
+ |  +- org.apache.velocity:velocity:jar:1.7:compile
+ |  |  \- commons-lang:commons-lang:jar:2.4:compile
+ |  \- net.shibboleth.utilities:java-support:jar:7.5.1:compile
+ +- commons-collections:commons-collections:jar:3.2.2:compile
+ +- com.jayway.jsonpath:json-path:jar:2.4.0:compile
+ |  \- net.minidev:json-smart:jar:2.4.7:compile
+ |     \- net.minidev:accessors-smart:jar:2.4.7:compile
+ |        \- org.ow2.asm:asm:jar:9.1:compile
+ +- commons-io:commons-io:jar:2.7:test
+ +- org.hamcrest:hamcrest-all:jar:1.3:test
+ +- junit:junit:jar:4.13.1:test
+ |  \- org.hamcrest:hamcrest-core:jar:1.3:test
+ +- org.apache.httpcomponents:fluent-hc:jar:4.5.13:test
+ +- org.opensearch.plugin:reindex-client:jar:1.1.0-SNAPSHOT:test
+ +- org.apache.httpcomponents:httpclient:jar:4.5.13:compile
+ +- org.opensearch:opensearch-ssl-config:jar:1.1.0-SNAPSHOT:test
+ +- org.opensearch.plugin:percolator-client:jar:1.1.0-SNAPSHOT:test
+ +- org.opensearch.plugin:lang-mustache-client:jar:1.1.0-SNAPSHOT:test
+ |  \- com.github.spullara.mustache.java:compiler:jar:0.9.6:test
+ +- org.opensearch.plugin:parent-join-client:jar:1.1.0-SNAPSHOT:test
+ +- org.opensearch.plugin:aggs-matrix-stats-client:jar:1.1.0-SNAPSHOT:test
+ +- org.mockito:mockito-core:jar:2.23.0:test
+ |  +- net.bytebuddy:byte-buddy:jar:1.9.0:test
+ |  +- net.bytebuddy:byte-buddy-agent:jar:1.9.0:test
+ |  \- org.objenesis:objenesis:jar:2.6:test
+ +- org.springframework.kafka:spring-kafka-test:jar:2.5.4.RELEASE:test
+ |  +- org.springframework:spring-context:jar:5.2.8.RELEASE:test
+ |  |  +- org.springframework:spring-aop:jar:5.2.8.RELEASE:test
+ |  |  +- org.springframework:spring-beans:jar:5.2.8.RELEASE:test
+ |  |  +- org.springframework:spring-core:jar:5.2.8.RELEASE:test
+ |  |  |  \- org.springframework:spring-jcl:jar:5.2.8.RELEASE:test
+ |  |  \- org.springframework:spring-expression:jar:5.2.8.RELEASE:test
+ |  +- org.springframework:spring-test:jar:5.2.8.RELEASE:test
+ |  +- org.springframework.retry:spring-retry:jar:1.2.5.RELEASE:test
+ |  +- org.apache.kafka:kafka-streams:jar:2.5.0:test
+ |  |  +- org.apache.kafka:connect-json:jar:2.5.0:test
+ |  |  |  \- org.apache.kafka:connect-api:jar:2.5.0:test
+ |  |  \- org.rocksdb:rocksdbjni:jar:5.18.3:test
+ |  +- org.apache.kafka:kafka-streams-test-utils:jar:2.5.0:test
+ |  +- org.apache.kafka:kafka_2.12:jar:2.5.0:test
+ |  |  +- com.fasterxml.jackson.module:jackson-module-scala_2.12:jar:2.10.2:test
+ |  |  |  \- com.fasterxml.jackson.module:jackson-module-paranamer:jar:2.10.2:test
+ |  |  |     \- com.thoughtworks.paranamer:paranamer:jar:2.8:test
+ |  |  +- com.fasterxml.jackson.dataformat:jackson-dataformat-csv:jar:2.10.2:test
+ |  |  +- com.fasterxml.jackson.datatype:jackson-datatype-jdk8:jar:2.10.2:test
+ |  |  +- com.yammer.metrics:metrics-core:jar:2.2.0:test
+ |  |  +- org.scala-lang.modules:scala-collection-compat_2.12:jar:2.1.3:test
+ |  |  +- org.scala-lang.modules:scala-java8-compat_2.12:jar:0.9.0:test
+ |  |  +- org.scala-lang:scala-library:jar:2.12.10:test
+ |  |  +- org.scala-lang:scala-reflect:jar:2.12.10:test
+ |  |  +- com.typesafe.scala-logging:scala-logging_2.12:jar:3.9.2:test
+ |  |  \- org.apache.zookeeper:zookeeper:jar:3.5.7:test
+ |  |     +- org.apache.zookeeper:zookeeper-jute:jar:3.5.7:test
+ |  |     +- org.apache.yetus:audience-annotations:jar:0.5.0:test
+ |  |     \- io.netty:netty-transport-native-epoll:jar:4.1.45.Final:test
+ |  |        \- io.netty:netty-transport-native-unix-common:jar:4.1.45.Final:test
+ |  +- org.apache.kafka:kafka_2.12:jar:test:2.5.0:test
+ |  \- org.junit.jupiter:junit-jupiter-api:jar:5.6.2:test
+ |     +- org.apiguardian:apiguardian-api:jar:1.1.0:test
+ |     +- org.opentest4j:opentest4j:jar:1.2.0:test
+ |     \- org.junit.platform:junit-platform-commons:jar:1.6.2:test
+ +- org.apache.kafka:kafka-clients:jar:test:2.0.1:test
+ +- javax.servlet:servlet-api:jar:2.5:test
+ +- com.unboundid:unboundid-ldapsdk:jar:4.0.9:test
+ +- com.github.stephenc.jcip:jcip-annotations:jar:1.0-1:test
+ \- io.netty:netty-tcnative:jar:linux-x86_64:2.0.25.Final:provided
+ [1m------------------------------------------------------------------------[m
+ [1;32mBUILD SUCCESS[m
+ [1m------------------------------------------------------------------------[m
+ Total time:  1.099 s
+ Finished at: 2021-09-16T15:41:28Z
+ [1m------------------------------------------------------------------------[m

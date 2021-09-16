@@ -4,7 +4,7 @@
 # this file be licensed under the Apache-2.0 license or a
 # compatible open source license.
 
-from ci_workflow.ci_check_gradle_dependencies_opensearch import \
+from ci_workflow.ci_check_gradle_dependencies import \
     CiCheckGradleDependenciesOpenSearchVersion
 from ci_workflow.ci_check_gradle_properties_version import \
     CiCheckGradlePropertiesVersion

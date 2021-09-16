@@ -11,32 +11,29 @@ from ci_workflow.ci_check import CiCheck
 from system.properties_file import PropertiesFile
 
 
-class CiCheckGradleDependencies(CiCheck):
+class CiCheckMavenDependencies(CiCheck):
     def __init__(self, component, git_repo, target, args):
         super().__init__(component, git_repo, target, args)
-        self.gradle_project = args if args else None
         self.dependencies = self.__get_dependencies()
 
     def __get_dependencies(self):
         cmd = " ".join(
             [
-                f"./gradlew {self.gradle_project or ''}:dependencies",
-                f"-Dopensearch.version={self.target.opensearch_version}",
-                f"-Dbuild.snapshot={str(self.target.snapshot).lower()}",
-                '| grep -e "---"',
+                "mvn dependency:tree",
+                "| grep INFO",
+                "| cut -d] -f2",
             ]
         )
 
-        lines = self.git_repo.output(cmd)
-        stack = ["root"]
+        lines = self.__extract_dependencies__(self.git_repo.output(cmd))
+        stack = [lines.pop()] if lines else []
         props = PropertiesFile("")
-        for line in lines.split("\n"):
-            # e.g. "|    +--- org.opensearch:opensearch-core:1.1.0-SNAPSHOT"
-            # see job_scheduler_dependencies.txt in tests for an example
-            match = re.search(r"---\s(.*):([0-9,\w,.-]*)[\s]*", line)
+        for line in lines:
+            # e.g. "|    +- org.opensearch:opensearch-core:1.1.0-SNAPSHOT"
+            # see security_dependencies.txt in tests for an example
+            match = re.search(r"-\s(.*):([0-9,\w,.-]*):([0-9,\w,.-]*)[\s]*", line)
             if match:
-                levels = line.count("   ") + line.count("---")
-
+                levels = line.count(" ")
                 while levels < len(stack):
                     del stack[-1]
 
@@ -52,7 +49,20 @@ class CiCheckGradleDependencies(CiCheck):
 
         return props
 
-class CiCheckGradleDependenciesOpenSearchVersion(CiCheckGradleDependencies):
+    def __extract_dependencies__(self, output):
+        lines = []
+        tree = False
+        for line in output.split("\n"):
+            line = line.strip()
+            if "maven-dependency-plugin:" in line:
+                tree = True
+            elif "----" in line:
+                tree = False
+            elif tree:
+                lines.append(line)
+        return lines
+
+class CiCheckMavenDependenciesOpenSearchVersion(CiCheckMavenDependencies):
     def check(self):
         self.dependencies.check_value(
             "org.opensearch:opensearch", self.target.opensearch_version
