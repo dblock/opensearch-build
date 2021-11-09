@@ -1,8 +1,4 @@
-library identifier: 'loadLocalLibrary@refactor-jenkinsfile',
-    retriever: modernSCM([
-        $class: 'GitSCMSource', 
-        remote: 'https://github.com/dblock/opensearch-build.git'
-    ])
+library identifier: 'loadLocalLibrary@refactor-jenkinsfile', retriever: legacySCM(scm)
 
 pipeline {
     agent none
