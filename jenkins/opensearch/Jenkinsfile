@@ -1,5 +1,4 @@
-library identifier: 'addJenkinsMessage@refactor-jenkinsfile', retriever: legacySCM(scm)
-library identifier: 'getJenkinsMessages@refactor-jenkinsfile', retriever: legacySCM(scm)
+def jenkins = library(identifier: "t@master", retriever: legacySCM(scm)).jenkins
 
 pipeline {
     agent none
@@ -134,7 +133,7 @@ pipeline {
             post() {
                 success {
                     node('Jenkins-Agent-al2-x64-c54xlarge-Docker-Host') {
-                        messages = getJenkinsMessages(['build-x64', 'build-arm64'])
+                        messages = jenkins.Messages.new(this).all(['build-x64', 'build-arm64'])
                         publishNotification(":white_check_mark:", "Successful Build", "\n${messages}")
                     }
                 }
@@ -165,7 +164,7 @@ void build() {
         s3Upload(file: "dist", bucket: "${ARTIFACT_BUCKET_NAME}", path: "${artifactPath}/dist")
     }
 
-    addJenkinsMessage("${STAGE_NAME}", "${BASE_URL}/builds/manifest.yml\n${BASE_URL}/dist/manifest.yml")
+    jenkins.Messages.new(this).add("${STAGE_NAME}", "${BASE_URL}/builds/manifest.yml\n${BASE_URL}/dist/manifest.yml")
 }
 
 /** Publishes a notification to a slack instance*/
