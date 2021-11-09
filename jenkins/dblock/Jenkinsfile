@@ -1,4 +1,5 @@
-library identifier: 'loadLocalLibrary@refactor-jenkinsfile', retriever: legacySCM(scm)
+library identifier: 'addJenkinsMessage@refactor-jenkinsfile', retriever: legacySCM(scm)
+library identifier: 'getJenkinsMessages@refactor-jenkinsfile', retriever: legacySCM(scm)
 
 pipeline {
     agent none
@@ -14,8 +15,12 @@ pipeline {
             }
             steps {
                 script { 
-                    echo "Running step ..."
-                    notifySlack()
+                    echo "Pushing messages ..."
+                    addJenkinsMessage("${STAGE_NAME}-1", "Test 1")
+                    addJenkinsMessage("${STAGE_NAME}-2", "Test 2")
+                    echo "Gathering messages ..."
+                    messages = getJenkinsMessages(["notify-1", "notify-2"])
+                    echo "All messages:\n${messages}"
                 }
             }
         }
