@@ -16,7 +16,6 @@
 
 plugins {
     id 'com.mkobit.jenkins.pipelines.shared-library' version '0.10.1'
-    id 'jacoco'
     id 'java'
     id 'groovy'
 }
