@@ -42,6 +42,21 @@ class InputManifest extends Manifest {
     def getCi() {
         return new InputManifest.Ci(this.data.ci)
     }
+
+    def build(config = [:]) {
+        def args = [
+            config.script ?: "./build.sh",
+            "\"${this.filename}\"",
+            config.platform ? "-p ${config.platform}" : null,
+            config.architecture ? "-a ${config.architecture}" : null,
+            config.snapshot ? '--snapshot' : null,
+        ] - null
+
+        this.steps.sh args.join(' ')
+
+        // BUGBUG: this fails
+        // return this.steps.readYaml(file: 'build/manifest.yml')
+    }
 }
 
 

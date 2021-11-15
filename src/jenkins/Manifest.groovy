@@ -13,8 +13,10 @@ class Manifest implements Serializable {
     def filename
     def data
 
-    Manifest(steps, data) {
-        this.data = data
+    Manifest(steps, filename, data) {
         this.steps = steps
+        this.filename = filename
+        // BUGBUG: calling this.steps.readYaml bails without error
+        this.data = data
     }
 }

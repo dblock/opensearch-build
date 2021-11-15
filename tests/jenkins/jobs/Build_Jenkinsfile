@@ -31,7 +31,13 @@ pipeline {
             steps {
                 script { 
                     git url: 'https://github.com/opensearch-project/opensearch-build.git', branch: 'main'
-                    def inputManifest = lib.InputManifest.new(this, readYaml(file: "manifests/$INPUT_MANIFEST"))
+                    
+                    def inputManifest = lib.InputManifest.new(
+                        this, 
+                        "manifests/$INPUT_MANIFEST", 
+                        readYaml(file: "manifests/$INPUT_MANIFEST")
+                    )
+
                     dockerImage = inputManifest.ci.dockerImage
                     dockerArgs = inputManifest.ci.dockerArgs ?: '-e JAVA_HOME=/usr/lib/jvm/adoptopenjdk-14-hotspot'
                     echo "Using Docker image ${dockerImage} (${dockerArgs})"
@@ -57,7 +63,9 @@ pipeline {
                     steps {
                         script {
                             git url: 'https://github.com/opensearch-project/opensearch-build.git', branch: 'main'
+
                             sh "echo ./build.sh manifests/$INPUT_MANIFEST --snapshot"
+
                             withCredentials([usernamePassword(credentialsId: 'Sonatype', usernameVariable: 'SONATYPE_USERNAME', passwordVariable: 'SONATYPE_PASSWORD')]) {
                                 echo "$WORKSPACE/publish/publish-snapshot.sh $WORKSPACE/builds/maven"
                             }
@@ -148,13 +156,21 @@ pipeline {
 }
 
 void build() {
-    git url: 'https://github.com/opensearch-project/opensearch-build.git', branch: 'main'
+    def inputManifest = lib.InputManifest.new(
+        this,
+        "manifests/$INPUT_MANIFEST",
+        readYaml(file: "tests/data/opensearch-build-1.1.0.yml")
+    )
 
-    sh "echo ./build.sh manifests/$INPUT_MANIFEST"
+    inputManifest.build(
+        script: 'echo build.sh'
+    )
+
+    def buildManifest = readYaml(
+        file: 'tests/data/opensearch-build-1.1.0.yml'
+    )
     
-    manifest = readYaml(file: 'tests/data/opensearch-build-1.1.0.yml')
-    
-    def artifactPath = "${env.JOB_NAME}/${manifest.build.version}/${env.BUILD_NUMBER}/${manifest.build.platform}/${manifest.build.architecture}";
+    def artifactPath = "${env.JOB_NAME}/${buildManifest.build.version}/${env.BUILD_NUMBER}/${buildManifest.build.platform}/${buildManifest.build.architecture}";
     def BASE_URL = "${PUBLIC_ARTIFACT_URL}/${artifactPath}";
 
     echo "sh ./assemble.sh builds/manifest.yml --base-url ${BASE_URL}"

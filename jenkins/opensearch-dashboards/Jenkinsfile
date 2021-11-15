@@ -37,7 +37,7 @@ pipeline {
             steps {
                 script { 
                     git url: 'https://github.com/opensearch-project/opensearch-build.git', branch: 'main'
-                    def inputManifest = lib.InputManifest.new(this, readYaml(file: "manifests/$INPUT_MANIFEST"))
+                    def inputManifest = lib.InputManifest.new(this, "manifests/$INPUT_MANIFEST"))
                     dockerImage = inputManifest.ci.dockerImage
                     dockerArgs = inputManifest.ci.dockerArgs
                     echo "Using Docker image ${dockerImage} (${dockerArgs})"
