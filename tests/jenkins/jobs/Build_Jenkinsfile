@@ -1,6 +1,6 @@
 // similar jenkins/opensearch/Jenkinsfile but echo instead of sh for testing
 
-lib = library(identifier: "jenkins@current", retriever: legacySCM(scm)).jenkins
+library(identifier: "jenkins@current", retriever: legacySCM(scm))
 
 pipeline {
     agent none
@@ -136,7 +136,7 @@ pipeline {
                             def URL_arm64 = "${PUBLIC_ARTIFACT_URL}/${env.JOB_NAME}/${VERSION}/${env.BUILD_NUMBER}/linux/arm64/dist/opensearch-${VERSION}-linux-arm64.tar.gz"
                             def s = "id && pwd && cd docker/release && curl -sSL $URL_x64 -o opensearch-x64.tgz && curl -sSL $URL_arm64 -o opensearch-arm64.tgz && bash build-image-multi-arch.sh -v ${VERSION} -f ./dockerfiles/opensearch.al2.dockerfile -p opensearch -a 'x64,arm64' -r opensearchstaging/opensearch -t 'opensearch-x64.tgz,opensearch-arm64.tgz' -n ${env.BUILD_NUMBER}"
                             echo "dockerBuild:${s}"
-                            def stashed = lib.Messages.new(this).get(['build-x64', 'build-arm64'])
+                            def stashed = new jenkins.Messages(this).get(['build-x64', 'build-arm64'])
                             publishNotification(":white_check_mark:", "Successful Build", "\n${stashed}")
                         }
                     }
@@ -168,7 +168,7 @@ void build() {
         echo "s3Upload(file: 'dist', bucket: '${ARTIFACT_BUCKET_NAME}', path: '${artifactPath}/dist')"
     }
 
-    lib.Messages.new(this).add("${STAGE_NAME}", "${BASE_URL}/builds/manifest.yml\n${BASE_URL}/dist/manifest.yml")
+    new jenkins.Messages(this).add("${STAGE_NAME}", "${BASE_URL}/builds/manifest.yml\n${BASE_URL}/dist/manifest.yml")
 }
 
 /** Publishes a notification to a slack instance*/

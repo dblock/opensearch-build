@@ -6,14 +6,15 @@
  * compatible open source license.
  */
  
-def lib = library("jenkins")
+@Library('jenkins')
+import jenkins.Messages
 
 pipeline {
     agent none
     stages {
         stage('Example Build') {
             steps {
-                def messages = lib.jenkins.Messages.new(this)
+                def messages = new Messages(this)
                 messages.add("stage1", "message 1")
                 messages.add("stage2", "message 2")
             }
@@ -21,7 +22,7 @@ pipeline {
         post() {
             success {
                 script {
-                    def messages = lib.jenkins.Messages.new(this)
+                    def messages = new Messages(this)
                     def stashed = messages.get(["stage1", "stage2"])
                     echo stashed
                 }
