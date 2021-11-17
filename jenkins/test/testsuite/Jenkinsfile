@@ -62,7 +62,7 @@ pipeline {
             steps {
                 script {
                     basePath = "https://ci.opensearch.org/ci/dbc/bundle-build/${opensearch_version}/${build_id}/${platform}/${architecture}"
-                    sh "./test.sh ${JOB_NAME} ${basePath} --test-run-id ${env.BUILD_NUMBER}"
+                    sh "./test.sh ${JOB_NAME} ${basePath} --test-run-id ${BUILD_NUMBER}"
                 }
             }
             post() {
