@@ -10,6 +10,7 @@
 
 # Export OpenSearch Home
 export OPENSEARCH_HOME=/usr/share/opensearch
+export OPENSEARCH_PATH_CONF=$OPENSEARCH_HOME/config
 
 # The virtual file /proc/self/cgroup should list the current cgroup
 # membership. For each hierarchy, you can follow the cgroup path from
@@ -108,7 +109,7 @@ function runOpensearch {
     OPENSEARCH_PID=$!
 
     # Start performance analyzer agent
-    performance-analyzer-agent-cli > $OPENSEARCH_HOME/logs/performance-analyzer.log 2>&1 &
+    $OPENSEARCH_HOME/bin/opensearch-performance-analyzer/performance-analyzer-agent-cli > $OPENSEARCH_HOME/logs/performance-analyzer.log 2>&1 &
     PA_PID=$!
 
     # Wait for the child processes to terminate

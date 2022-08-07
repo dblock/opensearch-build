@@ -27,7 +27,6 @@ class TestBuildAssembleUpload extends BuildPipelineTest {
         binding.setVariable('ARTIFACT_PROMOTION_ROLE_NAME', 'role')
         binding.setVariable('AWS_ACCOUNT_ARTIFACT', 'dummy')
         binding.setVariable('ARTIFACT_PRODUCTION_BUCKET_NAME', 'bucket')
-        binding.setVariable('ARTIFACT_UPLOAD_ROLE_NAME', 'upload_role')
 
         helper.registerAllowedMethod("withCredentials", [List, Closure], { list, closure ->
             closure.delegate = delegate
@@ -50,8 +49,8 @@ class TestBuildAssembleUpload extends BuildPipelineTest {
             return true
         })
 
-        Path sourceBuildManifest = Path.of("tests/data/opensearch-build-1.1.0.yml")
-        Path targetBuildManifest = Path.of("builds/opensearch/manifest.yml")
+        Path sourceBuildManifest = Path.of("tests/data/opensearch-build-1.3.0.yml")
+        Path targetBuildManifest = Path.of("tar/builds/opensearch/manifest.yml")
         Files.createDirectories(targetBuildManifest.getParent())
         Files.copy(sourceBuildManifest, targetBuildManifest, StandardCopyOption.REPLACE_EXISTING)
 

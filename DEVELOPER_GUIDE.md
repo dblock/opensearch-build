@@ -20,6 +20,7 @@
     - [Run Tests](#run-tests-1)
       - [Regression Tests](#regression-tests)
       - [Testing in Jenkins](#testing-in-jenkins)
+      - [Integ Tests in Jenkins](#integ-tests-in-jenkins)
 
 # Developer Guide
 
@@ -77,6 +78,12 @@ Install [nvm](https://github.com/nvm-sh/nvm/blob/master/README.md) to use the No
 ```
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
 nvm install v14.18.2
+```
+
+Add the lines below to the correct profile file (`~/.zshrc`, `~/.bashrc`, etc.).
+```
+export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 ```
 
 #### Yarn
@@ -240,7 +247,7 @@ and outputs [Hello_Jenkinsfile.txt](tests/jenkins/jobs/Hello_Jenkinsfile.txt). I
 
 - To update the recorded .txt file run `./gradlew test -info -Ppipeline.stack.write=true` or update its value in [gradle.properties](gradle.properties).
 
-- To run a specific test case, run `./gradlew test -info -tests=TestCaseClassName`
+- To run a specific test case, run `./gradlew test -info --tests=TestCaseClassName`
 
 #### Tests for jenkins job
 Each jenkins job should have a test case associated with it. 
@@ -282,3 +289,8 @@ Make your code changes in a branch, e.g. `jenkins-changes`, including to any of 
 * Script path: `tests/jenkins/jobs/Build_DryRun_Jenkinsfile`
 
 You can now iterate by running the job in Jenkins, examining outputs, and pushing updates to GitHub.
+
+#### Integ Tests in Jenkins
+- Opensearch bundle build executes the integration tests for the opensearch as well as plugins. 
+- To add integ tests for a new plugin, add the plugin in the latest version [test manifest](manifests/2.0.0/opensearch-2.0.0-test.yml).
+- The test execution is triggered by the [integtest.sh](scripts/default/integtest.sh). In case a custom implementation is required, plugin owner can add that script in their own repo and [script_finder](src/paths/script_finder.py) will pick that up over the default script.

@@ -6,6 +6,7 @@
 [![codecov](https://codecov.io/gh/opensearch-project/opensearch-build/branch/main/graph/badge.svg?token=03S5XZ80UI)](https://codecov.io/gh/opensearch-project/opensearch-build)
 
 - [Releasing OpenSearch](#releasing-opensearch)
+  - [Releases and Versions](#releases-and-versions)
   - [Creating a New Version](#creating-a-new-version)
   - [Onboarding a New Plugin](#onboarding-a-new-plugin)
   - [Building and Testing an OpenSearch Distribution](#building-and-testing-an-opensearch-distribution)
@@ -13,6 +14,7 @@
     - [Assembling a Distribution](#assembling-a-distribution)
     - [Building Patches](#building-patches)
     - [CI/CD Environment](#cicd-environment)
+    - [Latest Distribution Url](#latest-distribution-url)
     - [Testing the Distribution](#testing-the-distribution)
     - [Signing Artifacts](#signing-artifacts)
   - [Making a Release](#making-a-release)
@@ -35,9 +37,20 @@
 
 ## Releasing OpenSearch
 
+### Releases and Versions
+
+The OpenSearch project releases as versioned distributions of OpenSearch, OpenSearch Dashboards, and the OpenSearch plugins. It [follows semantic versioning](https://opensearch.org/blog/technical-post/2021/08/what-is-semver/). Software, such as Data Prepper, clients, and the Logstash output plugin, are versioned independently of the OpenSearch Project. They also may have independent releases from the main project distributions. The OpenSearch Project may also release software under alpha, beta, release candidate, and generally available labels. The definition of when to use these labels is derived from [the Wikipedia page on Software release lifecycle](https://en.wikipedia.org/wiki/Software_release_life_cycle). Below is the definition of when to use each label.
+
+Release labels:
+
+* **Alpha** - The code is released with instructions to build. Built distributions of the software may not be available. Some features many not be complete. Additional testing and developement work is planned. Distributions will be postfixed with `-alphaX` where "X" is the number of the alpha version  (e.g., "2.0-alpha1").
+* **Beta** - Built distributions of the software are available. All features are completed. Additional testing and developement work is planned. Distributions will be postfixed with `-betaX` where "X" is the number of the beta version  (e.g., "2.0.0-beta1").
+* **Release Candidate** - Built distributions of the software are available. All features are completed. Code is tested and minimal validation remains. At this stage the software is potentially stable and will release unless signficant bugs emerge. Distributions will be postfixed with `-rcX` where "X" is the number of the release candidate version (e.g., "2.0.0-rc1").
+* **Generally Available** - Built distributions of the software are available. All features are completed and documented. All testing is completed. Distributions for generally available versions are not postfixed with an additional label (e.g., "2.0.0").
+
 ### Creating a New Version
 
-OpenSearch and OpenSearch Dashboards are distributed as bundles that include both core engines and plugins. Each new OpenSearch release process starts when any one component increments a version, typically on the `main` branch. For example, [OpenSearch#1192](https://github.com/opensearch-project/OpenSearch/pull/1192) incremented the version to 2.0. The [version check automation workflow](.github/workflows/versions.yml) will notice this change or it can be triggered [manually](https://github.com/opensearch-project/opensearch-build/actions/workflows/versions.yml), and make a pull request (e.g. [opensearch-build#514](https://github.com/opensearch-project/opensearch-build/pull/514)) that adds a new manifest (e.g. [opensearch-2.0.0.yml](manifests/2.0.0/opensearch-2.0.0.yml). After that's merged, a GitHub issue is automatically opened by [this workflow](.github/workflows/releases.yml) to make a new release using [this release template](.github/ISSUE_TEMPLATE/release_template.md) (e.g. [opensearch-build#566](https://github.com/opensearch-project/opensearch-build/issues/566)). Existing and new components [(re)onboard into every release](ONBOARDING.md) by submitting pull requests to each version's manifest.
+Each new OpenSearch release process starts when any one component increments a version, typically on the `main` branch. For example, [OpenSearch#1192](https://github.com/opensearch-project/OpenSearch/pull/1192) incremented the version to 2.0. The [version check automation workflow](.github/workflows/versions.yml) will notice this change or it can be triggered [manually](https://github.com/opensearch-project/opensearch-build/actions/workflows/versions.yml), and make a pull request (e.g. [opensearch-build#514](https://github.com/opensearch-project/opensearch-build/pull/514)) that adds a new manifest (e.g. [opensearch-2.0.0.yml](manifests/2.0.0/opensearch-2.0.0.yml). After that's merged, a GitHub issue is automatically opened by [this workflow](.github/workflows/releases.yml) to make a new release using [this release template](.github/ISSUE_TEMPLATE/release_template.md) (e.g. [opensearch-build#566](https://github.com/opensearch-project/opensearch-build/issues/566)). Existing and new components [(re)onboard into every release](ONBOARDING.md) by submitting pull requests to each version's manifest.
 
 ### Onboarding a New Plugin
 
@@ -79,6 +92,27 @@ We build, assemble, and test our artifacts on docker containers. We provide dock
 
 See [jenkins](./jenkins) and [docker](./docker) for more information.
 
+#### Latest Distribution Url
+
+The distribution url has a build number (from Jenkins job) embedded inside it. See this example where `3942` is the build number. https://ci.opensearch.org/ci/dbc/distribution-build-opensearch-dashboards/2.1.0/3942/linux/arm64/rpm/builds/opensearch-dashboards/manifest.yml
+
+
+The feature of `latest` distribution url is to make it build number agnostic. For the example above, its corresponding latest distribution url is as follows.
+
+https://ci.opensearch.org/ci/dbc/distribution-build-opensearch-dashboards/2.1.0/latest/linux/arm64/rpm/builds/opensearch-dashboards/manifest.yml
+
+It resolves `latest` to a specific build number by checking an `index.json` [file](https://ci.opensearch.org/ci/dbc/distribution-build-opensearch-dashboards/2.1.0/index.json). This file has contents like this.
+
+```
+{"latest":"3942"}
+```
+
+The file is updated when a distribution build job is completed for the given product and version (or is created when such distribution job succeeds for the first time). Since one distribution build job consists of multiple stages for diffferent combinations of distribution type, platform and architecture, the `index.json` is only modified once all stages succeed. With this said, the `latest` url only works when the distribution build job succeeds at least once for the given product and version.
+
+The resolution logic exists in [CloudFront url rewriter](https://github.com/opensearch-project/opensearch-build/tree/main/deployment/lambdas/cf-url-rewriter). The TTL (time to live) is set to `5 mins` which means that the `latest` url may need up to 5 mins to get new contents after `index.json` is updated.
+
+All the artifacts accessible through the regular distribution url can be accessed by the `latest` url. This includes both OpenSearch Core, OpenSearch Dashboards Core and their plugins.
+
 #### Testing the Distribution
 
 Tests the OpenSearch distribution, including integration, backwards-compatibility and performance tests.
@@ -91,11 +125,33 @@ See [src/test_workflow](./src/test_workflow) for more information.
 
 #### Signing Artifacts
 
-The signing step takes the manifest file created from the build step and signs all its component artifacts using a tool called `opensearch-signer-client` (in progress of being open-sourced). The input requires a path to the build manifest and is expected to be inside the artifacts directory with the same directories mentioned in the build step. 
+For all types of signing within OpenSearch project we use `opensearch-signer-client` (in progress of being open-sourced) which is a wrapper around internal signing system and is only available for authenticated users. The input requires a path to the build manifest or directory containing all the artifacts or a single artifact. 
 
+Usage:
 ```bash
 ./sign.sh builds/opensearch/manifest.yml
 ```
+
+The tool currently supports following platforms for signing.
+#### PGP
+
+Anything can be signed using PGP signing eg: tarball, any type of file, etc. A .sig file will be returned containing the signature. OpenSearch and OpenSearch dashboards distributions, components such as data prepper, etc as well as maven artifacts are signed using PGP signing. See [this page](https://opensearch.org/verify-signatures.html) for how to verify signatures.
+
+
+#### WINDOWS
+
+Windows signing can be used to sign windows executables such as .msi, .msp, .msm, .cab, .dll, .exe, .appx, .appxbundle, .msix, .msixbundle, .sys, .vxd, .ps1, .psm1, and any PE file that is supported by [Signtool.exe](https://docs.microsoft.com/en-us/dotnet/framework/tools/signtool-exe). Various windows artifacts such as SQL OBDC, opensearch-cli, etc are signed using this method. 
+Windows code signing uses EV (Extended Validated) code signing certificates.
+
+|  Types of signing/Details   | Digest           | Cipher  | Key Size|
+| ------------- |:-------------| :-----| :-----|
+| PGP      | SHA1 | AES-128 | 2048 |
+| Windows      | SHA256      |    RSA | |
+| RPM | SHA512      |    RSA | 4096 |
+
+
+### Signing RPM artifacts
+RPM artifacts are signed via shell script which uses a [macros template](https://github.com/opensearch-project/opensearch-build/blob/main/scripts/pkg/sign_templates/rpmmacros). More details in this [commit](https://github.com/opensearch-project/opensearch-build/commit/950d55c1ed3f82e98120541fa40ff506338c1059). See [issue](https://github.com/opensearch-project/opensearch-build/issues/1547) to add RPM artifact signing functionality to the above signing system. Currently we are only signing OpenSearch and OpenSearch dashboards RPM distributions using this method.
 
 See [src/sign_workflow](./src/sign_workflow) for more information.
 
