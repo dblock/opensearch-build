@@ -39,6 +39,43 @@ class ComponentManifest(Manifest[ManifestType], Generic[ManifestType, Components
         }
 
 
+class Component:
+    platforms: List[str]
+
+    def __init__(self, data: dict) -> None:
+        self.name = data["name"]
+
+    def __to_dict__(self) -> dict:
+        return {
+            "name": self.name
+        }
+
+    def __matches__(self, focus: List[str] = [], platform: str = None) -> bool:
+        matches = True
+
+        if focus and len(focus) > 0:
+            matches = matches and self.name in focus
+
+        if platform and self.platforms:
+            matches = matches and platform in self.platforms
+
+        if not matches:
+            logging.info(f"Skipping {self.name}")
+
+        return matches
+
+
+class ComponentFromSource(Component):
+    repository: str
+
+    def __init__(self, data: dict) -> None:
+        super().__init__(data)
+        self.repository = data["repository"]
+
+    def __to_dict__(self) -> dict:
+        return {"name": self.name, "repository": self.repository}
+
+
 class Components(Dict[str, ComponentType], Generic[ComponentType]):
     def __init__(self, data: Dict[Any, Any]) -> None:
         create_component: Callable[[Any], Tuple[str, ComponentType]] = lambda component: (component["name"], self.__create__(component))
@@ -46,7 +83,10 @@ class Components(Dict[str, ComponentType], Generic[ComponentType]):
 
     @classmethod
     def __create__(self, data: dict) -> ComponentType:
-        return Component(data)  # type: ignore[return-value]
+        if "repository" in data:
+            return ComponentFromSource(data)  # type: ignore[return-value]
+        else:
+            return Component(data)  # type: ignore[return-value]
 
     def __to_dict__(self) -> List[Dict[Any, Any]]:
         as_dict: Callable[[ComponentType], dict] = lambda component: component.__to_dict__()
@@ -72,29 +112,3 @@ class Components(Dict[str, ComponentType], Generic[ComponentType]):
             raise ValueError(f"No components matched focus={','.join(focus)}.")
 
         return selected
-
-
-class Component:
-    platforms: List[str]
-
-    def __init__(self, data: dict) -> None:
-        self.name = data["name"]
-
-    def __to_dict__(self) -> dict:
-        return {
-            "name": self.name
-        }
-
-    def __matches__(self, focus: List[str] = [], platform: str = None) -> bool:
-        matches = True
-
-        if focus and len(focus) > 0:
-            matches = matches and self.name in focus
-
-        if platform and self.platforms:
-            matches = matches and platform in self.platforms
-
-        if not matches:
-            logging.info(f"Skipping {self.name}")
-
-        return matches
